@@ -1,0 +1,13 @@
+jid,title,label,group,rule_trust,hybrid_trust,hybrid_verdict,coverage,failed,unknown
+L06,International Journal of Computing,legitimate,core,72.5,60.8,Caution,1.0,I4 I6 I11 I12 I13 I16,0
+L08,Robotics and Biomimetics,legitimate,core,73.75,54.0,Caution,0.975,I3 I5 I9 I10 I11 I16 I18,1
+L09,Big Data Analytics,legitimate,core,78.75,78.6,Caution,0.975,I5 I9 I10 I14 I16 I18,1
+L24,Quarterly of Communications Psychology   فصلنامه روانشناسی ارتباطات,legitimate,doaj,78.75,47.7,High risk,0.925,I2 I9 I10 I17 I18,2
+L31,International Transactions on Electrical Engineering and Computer Science,legitimate,doaj_india,92.5,64.9,High risk,1.0,I13 I14,0
+L32,International Journal of Advanced Technology and Engineering Exploration,legitimate,scopus_india,96.25,74.3,Caution,0.975,I16,1
+L33,International Journal of Advances in Signal and Image Sciences,legitimate,scopus_india,91.25,77.1,Caution,0.975,I14 I16,1
+L34,Journal of VLSI Circuits and Systems,legitimate,scopus_india,85.0,60.9,Caution,1.0,I2 I11 I13 I16,0
+L37,IP Indian Journal of Library Science and Information Technology,legitimate,scopus_india,85.0,59.2,Caution,1.0,I3 I4 I12,0
+L40,Defence Science Journal,legitimate,scopus_india,77.5,55.8,Caution,1.0,I2 I4 I10 I11 I15,0
+L41,International Journal of Advanced Science and Engineering,legitimate,scopus_india,91.25,62.8,Caution,0.975,I14 I16,1
+P26,International Journal of Computer Science Engineering (IJCSE),predatory,beall,85.0,87.1,Low risk,1.0,I5 I13 I16 I20,0

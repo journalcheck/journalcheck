@@ -1,0 +1,6 @@
+setup,precision_mean,precision_std,recall_mean,recall_std,f1_mean,f1_std,accuracy_mean,accuracy_std,roc_auc_mean,roc_auc_std,legit_flagged_rate_mean,legit_flagged_rate_std,high_risk_missed_rate_mean,high_risk_missed_rate_std
+Rules (all 21 indicators),0.941,0.0,0.291,0.0,0.444,0.0,0.579,0.0,0.934,0.0,0.5,0.0,0.091,0.0
+Rules without list indicators,1.0,0.0,0.036,0.0,0.07,0.0,0.442,0.0,0.849,0.0,0.5,0.0,0.127,0.0
+Logistic regression,0.892,0.02,0.9,0.018,0.896,0.013,0.879,0.015,0.963,0.006,0.28,0.026,0.04,0.008
+Random forest,0.936,0.02,0.902,0.025,0.918,0.019,0.907,0.022,0.98,0.003,0.328,0.038,0.0,0.0
+Hybrid (rules + logistic),0.954,0.009,0.911,0.018,0.932,0.011,0.923,0.012,0.969,0.005,0.24,0.034,0.036,0.0

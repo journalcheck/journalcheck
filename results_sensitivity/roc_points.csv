@@ -1,0 +1,116 @@
+setup,fpr,tpr
+Rules (all 21 indicators),0.0,0.0
+Rules (all 21 indicators),0.0,0.0192
+Rules (all 21 indicators),0.0,0.0385
+Rules (all 21 indicators),0.0,0.1154
+Rules (all 21 indicators),0.0,0.1346
+Rules (all 21 indicators),0.0,0.1731
+Rules (all 21 indicators),0.0,0.3462
+Rules (all 21 indicators),0.0,0.3654
+Rules (all 21 indicators),0.0,0.4038
+Rules (all 21 indicators),0.0,0.4615
+Rules (all 21 indicators),0.0,0.5962
+Rules (all 21 indicators),0.0,0.7115
+Rules (all 21 indicators),0.0,0.7308
+Rules (all 21 indicators),0.0,0.7692
+Rules (all 21 indicators),0.0,0.7885
+Rules (all 21 indicators),0.025,0.8077
+Rules (all 21 indicators),0.125,0.8269
+Rules (all 21 indicators),0.175,0.8654
+Rules (all 21 indicators),0.2,0.8654
+Rules (all 21 indicators),0.475,0.8846
+Rules (all 21 indicators),0.475,0.9423
+Rules (all 21 indicators),0.475,0.9615
+Rules (all 21 indicators),0.5,0.9808
+Rules (all 21 indicators),0.55,1.0
+Rules (all 21 indicators),0.675,1.0
+Rules (all 21 indicators),0.725,1.0
+Rules (all 21 indicators),0.75,1.0
+Rules (all 21 indicators),0.975,1.0
+Rules (all 21 indicators),1.0,1.0
+Rules without list indicators,0.0,0.0
+Rules without list indicators,0.0,0.0192
+Rules without list indicators,0.0,0.0385
+Rules without list indicators,0.0,0.0769
+Rules without list indicators,0.0,0.1346
+Rules without list indicators,0.0,0.3846
+Rules without list indicators,0.0,0.4423
+Rules without list indicators,0.0,0.4808
+Rules without list indicators,0.0,0.5385
+Rules without list indicators,0.025,0.5769
+Rules without list indicators,0.1,0.5962
+Rules without list indicators,0.1,0.6731
+Rules without list indicators,0.15,0.7115
+Rules without list indicators,0.175,0.7308
+Rules without list indicators,0.45,0.75
+Rules without list indicators,0.45,0.8269
+Rules without list indicators,0.5,0.8654
+Rules without list indicators,0.55,0.8846
+Rules without list indicators,0.55,0.9038
+Rules without list indicators,0.55,0.9423
+Rules without list indicators,0.675,0.9423
+Rules without list indicators,0.725,0.9615
+Rules without list indicators,0.725,0.9808
+Rules without list indicators,0.75,1.0
+Rules without list indicators,0.975,1.0
+Rules without list indicators,1.0,1.0
+Logistic regression,0.0,0.0
+Logistic regression,0.0,0.0192
+Logistic regression,0.0,0.2692
+Logistic regression,0.0,0.3077
+Logistic regression,0.0,0.7308
+Logistic regression,0.025,0.7308
+Logistic regression,0.025,0.7885
+Logistic regression,0.05,0.7885
+Logistic regression,0.05,0.8077
+Logistic regression,0.125,0.8077
+Logistic regression,0.125,0.8269
+Logistic regression,0.175,0.8269
+Logistic regression,0.175,0.8846
+Logistic regression,0.225,0.8846
+Logistic regression,0.225,0.9423
+Logistic regression,0.25,0.9423
+Logistic regression,0.25,0.9808
+Logistic regression,0.325,0.9808
+Logistic regression,0.325,1.0
+Logistic regression,1.0,1.0
+Random forest,0.0,0.0
+Random forest,0.0,0.0769
+Random forest,0.0,0.1923
+Random forest,0.0,0.25
+Random forest,0.0,0.4423
+Random forest,0.0,0.4808
+Random forest,0.0,0.5577
+Random forest,0.0,0.5962
+Random forest,0.0,0.75
+Random forest,0.025,0.75
+Random forest,0.025,0.8269
+Random forest,0.05,0.8269
+Random forest,0.05,0.9038
+Random forest,0.075,0.9038
+Random forest,0.075,0.9231
+Random forest,0.2,0.9231
+Random forest,0.2,0.9808
+Random forest,0.225,0.9808
+Random forest,0.225,1.0
+Random forest,1.0,1.0
+Hybrid (rules + logistic),0.0,0.0
+Hybrid (rules + logistic),0.0,0.0192
+Hybrid (rules + logistic),0.0,0.4423
+Hybrid (rules + logistic),0.0,0.4808
+Hybrid (rules + logistic),0.0,0.7692
+Hybrid (rules + logistic),0.025,0.7692
+Hybrid (rules + logistic),0.025,0.8077
+Hybrid (rules + logistic),0.05,0.8077
+Hybrid (rules + logistic),0.05,0.8462
+Hybrid (rules + logistic),0.075,0.8462
+Hybrid (rules + logistic),0.075,0.8654
+Hybrid (rules + logistic),0.1,0.8654
+Hybrid (rules + logistic),0.1,0.8846
+Hybrid (rules + logistic),0.2,0.8846
+Hybrid (rules + logistic),0.2,0.9615
+Hybrid (rules + logistic),0.275,0.9615
+Hybrid (rules + logistic),0.275,0.9808
+Hybrid (rules + logistic),0.375,0.9808
+Hybrid (rules + logistic),0.375,1.0
+Hybrid (rules + logistic),1.0,1.0

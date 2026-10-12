@@ -1,0 +1,6 @@
+setup,legitimate_high_risk,legitimate_low_risk,predatory_high_risk,predatory_low_risk,hijacked_high_risk,hijacked_low_risk,median_trust_legitimate,median_trust_high_risk
+Rules (all 21 indicators),0.025,0.5,0.077,0.128,0.812,0.0,84.4,65.0
+Rules without list indicators,0.0,0.5,0.026,0.154,0.062,0.062,80.5,62.5
+Logistic regression,0.125,0.775,0.923,0.051,0.875,0.0,98.8,1.6
+Random forest,0.1,0.675,0.923,0.0,0.875,0.0,94.9,0.2
+Hybrid (rules + logistic),0.075,0.8,0.897,0.051,1.0,0.0,89.2,33.4

@@ -1,0 +1,34 @@
+{
+  "dataset": {
+    "external/compromised": 1,
+    "external/hijacked": 2,
+    "external/legitimate": 6,
+    "external/predatory": 4,
+    "train/hijacked": 16,
+    "train/legitimate": 41,
+    "train/predatory": 39
+  },
+  "cv": "10 x 5-fold stratified",
+  "hybrid_confusion_first_repeat": {
+    "tn": 34,
+    "fp": 7,
+    "fn": 6,
+    "tp": 49
+  },
+  "external_test": {
+    "n": 13,
+    "agreement": 0.846,
+    "kappa": 0.729
+  },
+  "hijack_test": {
+    "n": 18,
+    "flagged_high_risk_by_rules": 15,
+    "k1_any": 15,
+    "k1_without_list (I3 and I4 fail)": 3,
+    "I3_fail": 5,
+    "I4_fail": 5,
+    "I19_fail": 15
+  },
+  "median_seconds_per_journal": 4.6,
+  "mean_coverage": 0.802
+}

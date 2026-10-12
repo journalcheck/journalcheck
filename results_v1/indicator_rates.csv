@@ -1,0 +1,22 @@
+indicator,name,pass_legitimate,n_legitimate,pass_predatory,n_predatory,pass_hijacked,n_hijacked,unknown_share,gap_legit_vs_predatory
+I5,Indexed in DOAJ or Scopus,0.927,41,0.0,21,0.8,10,0.25,0.927
+I20,Not in the Beall's list archive,1.0,41,0.154,39,0.875,16,0.0,0.846
+I1,ISSN valid and registered,1.0,41,0.308,39,0.5,16,0.0,0.692
+I16,Licence declared,0.756,41,0.091,11,0.4,5,0.406,0.665
+I17,Crossref DOIs registered,0.976,41,0.524,21,0.5,10,0.25,0.452
+I11,Fees disclosed,0.868,38,0.564,39,0.625,16,0.031,0.304
+I12,No add-on incentives,0.926,27,0.692,39,0.812,16,0.146,0.234
+I14,Focused scope,0.829,41,0.692,39,0.938,16,0.0,0.137
+I13,Professional contact email,0.583,12,0.45,20,0.5,4,0.625,0.133
+I8,No guaranteed speed or acceptance,1.0,27,0.872,39,0.75,16,0.146,0.128
+I6,No unofficial impact factor,0.963,27,0.846,39,0.938,16,0.146,0.117
+I18,Ethics or retraction policy linked,0.704,27,0.59,39,0.438,16,0.146,0.114
+I7,No misleading quality badges,1.0,27,0.923,39,0.812,16,0.146,0.077
+I9,Peer-review policy linked,0.815,27,0.744,39,0.625,16,0.146,0.071
+I10,Editorial board linked,0.815,27,0.744,39,0.562,16,0.146,0.071
+I15,Plausible publication volume,0.976,41,0.917,12,1.0,8,0.365,0.059
+I3,Website domain matches registry,0.878,41,0.875,8,0.0,5,0.438,0.003
+I21,No integrity alert,1.0,41,1.0,39,1.0,16,0.0,0.0
+I19,Not on the hijacked-journal list,0.976,41,1.0,39,0.188,16,0.0,-0.024
+I2,Website title matches registry,0.815,27,1.0,12,0.625,8,0.51,-0.185
+I4,Domain age fits journal history,0.645,31,0.917,12,0.167,6,0.49,-0.272

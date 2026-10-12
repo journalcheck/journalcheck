@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use JournalCheck or its dataset, please cite it as below."
+title: "JournalCheck: an explainable framework for detecting predatory and hijacked journals"
+type: software
+authors:
+  - given-names: Rhea Ishani
+    family-names: Chemudupati
+    affiliation: "School of Technology, Woxsen University"
+  - given-names: Himanshu
+    family-names: Maurya
+    affiliation: "School of Technology, Woxsen University"
+version: 2.0.0
+date-released: 2026-10-12
+license: MIT
+repository-code: "https://github.com/HimanshuMaurya12/journalcheck"
+url: "https://himanshumaurya12.github.io/journalcheck/"
+keywords:
+  - predatory journals
+  - hijacked journals
+  - journal verification
+  - explainable machine learning
+  - OpenAlex

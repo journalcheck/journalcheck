@@ -1,0 +1,27 @@
+{
+  "court_findings": {
+    "rows": 3,
+    "source": "Curated from the FTC press release (April 2019)",
+    "downloaded": "2026-10-11 16:19 UTC"
+  },
+  "bealls": {
+    "rows": 2874,
+    "source": "beallslist.net (standalone journals + publishers)",
+    "downloaded": "2026-10-11 16:19 UTC"
+  },
+  "hijacked": {
+    "rows": 472,
+    "source": "Retraction Watch Hijacked Journal Checker (Google Sheet)",
+    "downloaded": "2026-10-11 16:22 UTC"
+  },
+  "retractions": {
+    "rows": 8567,
+    "source": "Retraction Watch database (Crossref GitLab)",
+    "downloaded": "2026-10-11 16:19 UTC"
+  },
+  "scimago": {
+    "rows": 32193,
+    "source": "SCImago Journal Rank download (Scopus titles)",
+    "downloaded": "2026-10-11 16:51 UTC"
+  }
+}

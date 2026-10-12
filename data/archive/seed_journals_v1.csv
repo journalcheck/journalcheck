@@ -1,0 +1,110 @@
+jid,title,issn,url,label,group,label_source,split
+L01,Material Design & Processing Communications,2577-6576,https://onlinelibrary.wiley.com/journal/25776576,legitimate,core,"OpenAlex type:journal,is_core:true",train
+L02,Nuclear Engineering and Design,0029-5493,https://www.journals.elsevier.com/nuclear-engineering-and-design,legitimate,core,"OpenAlex type:journal,is_core:true",train
+L03,ELCVIA Electronic Letters on Computer Vision and Image Analysis,1577-5097,http://elcvia.cvc.uab.cat/,legitimate,core,"OpenAlex type:journal,is_core:true",train
+L04,Procedia Computer Science,1877-0509,https://www.journals.elsevier.com/procedia-computer-science,legitimate,core,"OpenAlex type:journal,is_core:true",train
+L05,Journal of Communications and Networks,1229-2370,http://jcn.or.kr/home/journal/,legitimate,core,"OpenAlex type:journal,is_core:true",train
+L06,International Journal of Computing,1727-6209,https://computingonline.net/computing,legitimate,core,"OpenAlex type:journal,is_core:true",train
+L07,Information Security Journal A Global Perspective,1939-3547,https://www.tandfonline.com/toc/uiss20/current,legitimate,core,"OpenAlex type:journal,is_core:true",train
+L08,Robotics and Biomimetics,2197-3768,http://www.jrobio.com,legitimate,core,"OpenAlex type:journal,is_core:true",train
+L09,Big Data Analytics,2058-6345,https://link.springer.com/journal/41044,legitimate,core,"OpenAlex type:journal,is_core:true",train
+L10,Journal of Computer Science & Systems Biology,0974-7230,http://www.omicsonline.com,legitimate,core,"OpenAlex type:journal,is_core:true",train
+L11,International Journal of Artificial Intelligence and Machine Learning,2789-2557,https://www.svedbergopen.com/index.php/ijaiml,legitimate,core,"OpenAlex type:journal,is_core:true",train
+L12,Journal of Educational Computing Research,0735-6331,https://us.sagepub.com/en-us/nam/journal-of-educational-computing-research/journal202399,legitimate,core,"OpenAlex type:journal,is_core:true",train
+L13,Optics and Lasers in Engineering,0143-8166,https://www.journals.elsevier.com/optics-and-lasers-in-engineering,legitimate,core,"OpenAlex type:journal,is_core:true",train
+L14,CAAI Transactions on Intelligence Technology,2468-2322,https://www.sciencedirect.com/journal/caai-transactions-on-intelligence-technology,legitimate,core,"OpenAlex type:journal,is_core:true",train
+L15,Earthquake Engineering & Structural Dynamics,0098-8847,https://onlinelibrary.wiley.com/journal/10969845,legitimate,core,"OpenAlex type:journal,is_core:true",train
+L16,The Journal of Finance and Data Science,2405-9188,https://www.sciencedirect.com/journal/the-journal-of-finance-and-data-science,legitimate,doaj,"OpenAlex type:journal,is_in_doaj:true",train
+L17,Fuzzy Information and Engineering,1616-8658,https://www.tandfonline.com/toc/tfie20/current,legitimate,doaj,"OpenAlex type:journal,is_in_doaj:true",train
+L18,IET Power Electronics,1755-4535,https://ietresearch.onlinelibrary.wiley.com/journal/17554543,legitimate,doaj,"OpenAlex type:journal,is_in_doaj:true",train
+L19,Journal of Statistical Software,1548-7660,http://www.jstatsoft.org/,legitimate,doaj,"OpenAlex type:journal,is_in_doaj:true",train
+L20,South African Journal of Libraries and Information Science,0256-8861,http://sajlis.journals.ac.za,legitimate,doaj,"OpenAlex type:journal,is_in_doaj:true",train
+L21,Computer Methods and Programs in Biomedicine Update,2666-9900,https://www.journals.elsevier.com/computer-methods-and-programs-in-biomedicine-update,legitimate,doaj,"OpenAlex type:journal,is_in_doaj:true",train
+L22,Communications in Information Literacy,1933-5954,https://pdxscholar.library.pdx.edu/comminfolit/,legitimate,doaj,"OpenAlex type:journal,is_in_doaj:true",train
+L23,Journal of Information Systems and Telecommunication (JIST),2322-1437,http://www.jist.ir,legitimate,doaj,"OpenAlex type:journal,is_in_doaj:true",train
+L24,Quarterly of Communications Psychology   فصلنامه روانشناسی ارتباطات,3092-6432,https://sanad.iau.ir/journal/cp,legitimate,doaj,"OpenAlex type:journal,is_in_doaj:true",train
+L25,Indonesian Journal of Computing Engineering and Design (IJoCED),2656-1972,http://ojs.sampoernauniversity.ac.id/index.php/IJOCED/index,legitimate,doaj,"OpenAlex type:journal,is_in_doaj:true",train
+L26,Journal of artificial intelligence and data mining,2322-4444,http://jad.shahroodut.ac.ir/,legitimate,doaj,"OpenAlex type:journal,is_in_doaj:true",train
+L27,Journal of Information Technology and Computer Science,2540-9433,http://jitecs.ub.ac.id/index.php/jitecs/index,legitimate,doaj,"OpenAlex type:journal,is_in_doaj:true",train
+L28,International Journal of Computer Games Technology,1687-7047,https://www.hindawi.com/journals/ijcgt/,legitimate,doaj,"OpenAlex type:journal,is_in_doaj:true",train
+L29,Chemical and Biochemical Engineering Quarterly,0352-9568,http://silverstripe.fkit.hr/cabeq/,legitimate,doaj,"OpenAlex type:journal,is_in_doaj:true",train
+L30,Journal of Information and Communication Technology,1675-414X,http://jict.uum.edu.my/,legitimate,doaj,"OpenAlex type:journal,is_in_doaj:true",train
+L31,International Transactions on Electrical Engineering and Computer Science,2583-6471,https://iteecs.com/index.php/iteecs,legitimate,doaj_india,"OpenAlex type:journal,is_in_doaj:true,country_code:IN",train
+P01,European Journal of Scientific Research,,https://www.europeanjournalofscientificresearch.com/,predatory,beall,Beall's archive (standalone journals),train
+P02,Aurora’s International Journal of Computing​,,https://aurora-journal.ai/,predatory,beall,Beall's archive (standalone journals),train
+P03,Journal of Innovative Research and Solutions (JIRAS),1999-2025,https://fanartdesigns.com/,predatory,beall,Beall's archive (standalone journals),train
+P04,Universal Journal of Applied Computer Science and Technology,,https://taixiuonline.company/,predatory,beall,Beall's archive (standalone journals),train
+P05,Technology Reports of Kansai University – hijacker of a legitimate journal,,https://www.kansaiuniversityreports.com/,hijacked,beall_hijacked,Beall's archive (standalone journals),train
+P06,International Journal of Engineering Technology and Computer Research (IJETCR),2348-2117,https://ijetcr.org/index.php/ijetcr,predatory,beall,Beall's archive (standalone journals),train
+P07,Smart Nanosystems in Engineering and Medicine,,https://gintem.org/,predatory,beall,Beall's archive (standalone journals),train
+P08,International Journal of Scientific Research & Management Studies (IJSRMS),2349-3771,https://www.ijsrms.com/home/index.html,predatory,beall,Beall's archive (standalone journals),train
+P09,ARPN Journal of Science and Technology,,http://ejournalofscience.org/,predatory,beall,Beall's archive (standalone journals),train
+P10,International Journal of Innovative Research in Technology (IJIRT),2349-6002,https://ijirt.org/index.php,predatory,beall,Beall's archive (standalone journals),train
+P11,International Journal of Computing Academic Research (IJCAR),2305-9184,https://meacse.org/ijcar/,predatory,beall,Beall's archive (standalone journals),train
+P12,International Journal of Advanced Technology and Innovative Research (IJATIR),,http://www.ijatir.org/,predatory,beall,Beall's archive (standalone journals),train
+P13,International Journal of Science and Advanced Technology (IJSAT),,https://ijsat.com/,predatory,beall,Beall's archive (standalone journals),train
+P14,International Journal of Engineering & Technology (IJET),,http://www.iet-journals.org/,predatory,beall,Beall's archive (standalone journals),train
+P15,The IJES: The International Journal of Engineering and Science,,https://www.theijes.com/,predatory,beall,Beall's archive (standalone journals),train
+P16,Ultra Engineer,,https://santacoin.io/,predatory,beall,Beall's archive (standalone journals),train
+P17,International Journal of Current Innovation Research (IJCIR),,https://cvgorilla.com/?src=m98ufa,predatory,beall,Beall's archive (standalone journals),train
+P18,International Journal for Technological Research in Engineering (IJTRE),2347-4718,https://ijtre.com/,predatory,beall,Beall's archive (standalone journals),train
+P19,Aloy Journal of Soft Computing and Applications (AJSCA),,https://ajsca.org/,predatory,beall,Beall's archive (standalone journals),train
+P20,American International Journal of Contemporary Scientific Research,2349-4425,https://www.americanij.com/,predatory,beall,Beall's archive (standalone journals),train
+P21,International Journal of Recent Engineering Research and Development (IJRERD),,http://www.ijrerd.com/,predatory,beall,Beall's archive (standalone journals),train
+P22,LiBRI: Linguistic and Literary Broad Research and Innovation,,https://www.edusoft.ro/brain/index.php/libri,predatory,beall,Beall's archive (standalone journals),train
+P23,International Journal of Inventive Engineering and Sciences (IJIES),2319-9598,https://www.ijies.org/,predatory,beall,Beall's archive (standalone journals),train
+P24,"Research Journal of Life Sciences, Bioinformatics, Pharmaceutical, and Chemical Sciences (RJLBPCS)",2454-6348,https://rjlbpcs.com/,predatory,beall,Beall's archive (standalone journals),train
+P25,International Journal of Computer Engineering & Applications (IJCEA),2321-3469,https://ijcea.com/,predatory,beall,Beall's archive (standalone journals),train
+P26,International Journal of Computer Science Engineering (IJCSE),2319-7323,http://www.ijcse.net/index.php,predatory,beall,Beall's archive (standalone journals),train
+P27,International Journal of Applied Information Systems (IJIAS),,https://www.ijais.org/,predatory,beall,Beall's archive (standalone journals),train
+P28,Global Journal of Engineering Science and Researches (GJESR),,http://www.gjesr.com/,predatory,beall,Beall's archive (standalone journals),train
+P29,International Journal of Advanced Technology in Engineering and Science (IJATES),,http://www.ijates.com/,predatory,beall,Beall's archive (standalone journals),train
+P30,International Journal of Innovative Research in Science and Engineering (IJIRSE),2347-3207,http://www.ijirse.in/index.html,predatory,beall,Beall's archive (standalone journals),train
+P31,International Journal of Computer Science and Information Security,1947-5500,https://sites.google.com/site/ijcsis/,predatory,beall,Beall's archive (standalone journals),train
+P32,"Journal of Knowledge Management, Economics and Information Technology",,https://dragonkingdom.io/,predatory,beall,Beall's archive (standalone journals),train
+P33,International Journal for Research & Development in Technology (IJRDT),2349-3585,https://www.ijrdt.org/,predatory,beall,Beall's archive (standalone journals),train
+P34,International Journal of Advanced Research Trends in Engineering and Technology (IJARTET),2394-3785,https://ijartet.com/,predatory,beall,Beall's archive (standalone journals),train
+P35,Global Journal of Advanced Engineering Technologies and Sciences (GJAETS),,https://gjaets.com/index.php/gjaets/index,predatory,beall,Beall's archive (standalone journals),train
+P36,International Journal of Advanced Research in Computer and Communication Engineering (IJARCCE),2278-1021,https://www.ijarcce.com/,predatory,beall,Beall's archive (standalone journals),train
+P37,International Journal of Science Engineering and Advance Technology (IJSEAT),,https://www.ijseat.com/index.php/ijseat,predatory,beall,Beall's archive (standalone journals),train
+P38,International Journal of Research in Science & Technology (IJRST),2249-0604,https://www.ijrst.com/index.php,predatory,beall,Beall's archive (standalone journals),train
+P39,"International Journal of Medical Science and Advanced Clinical Research (IJMACR) (connection to BI International, Albert Science, EIJO, and Pharma Research)",2581-3633,https://www.ijmacr.com/,predatory,beall,Beall's archive (standalone journals),train
+P40,International Journal of Engineering Inventions (IJEI),2278-7461,http://www.ijeijournal.com/index.html,predatory,beall,Beall's archive (standalone journals),train
+H01,Journal of Zhengzhou University - Natural Science (clone),,https://www.zhengzhou-journal.com/,hijacked,hijacked,Retraction Watch Hijacked Journal Checker,train
+H02,Interciencia Journal (clone),,https://intercienciajournal.com/,hijacked,hijacked,Retraction Watch Hijacked Journal Checker,train
+H03,Wutan Huatan Jisuan Jishu (clone),,https://wthtjsjs.cn/,hijacked,hijacked,Retraction Watch Hijacked Journal Checker,train
+H04,Waffen- und Kostumkunde Journal (clone),,https://ts.domainname.de/druckhaus-hofmann.de,hijacked,hijacked,Retraction Watch Hijacked Journal Checker,train
+H05,Hunan Daxue Xuebao/Journal of Hunan University Natural Sciences (clone),,https://hunandaxuexuebao.com/KNavi/JournalDetail3.html,hijacked,hijacked,Retraction Watch Hijacked Journal Checker,train
+H06,Drugs and Clinic (clone),,https://www.drugsnclinic.com/,hijacked,hijacked,Retraction Watch Hijacked Journal Checker,train
+H07,Acta Scientiae (clone),,https://www.periodicos.ulbra.org/index.php/acta/index,hijacked,hijacked,Retraction Watch Hijacked Journal Checker,train
+H08,JOURNAL OF RESOURCE MANAGEMENT AND TECHNOLOGY (clone),,https://www.hugedomains.com/domain_profile.cfm?d=jrmat.com,hijacked,hijacked,Retraction Watch Hijacked Journal Checker,train
+H09,Mukt Shabd Journal (clone),,https://shabdbooks.com/,hijacked,hijacked,Retraction Watch Hijacked Journal Checker,train
+H10,Transylvanian Review (clone),,https://sweetbonanzaslot.org/,hijacked,hijacked,Retraction Watch Hijacked Journal Checker,train
+H11,Teikyo Medical Journal (clone),,https://www.teikyomedicaljournal.com/,hijacked,hijacked,Retraction Watch Hijacked Journal Checker,train
+H12,Social Science Forum Journal (clone),,https://druzboslovne-razprave.org/,hijacked,hijacked,Retraction Watch Hijacked Journal Checker,train
+H13,Azerbaijan medical journal (clone),,https://www.azerbaijanmedicaljournal.net/,hijacked,hijacked,Retraction Watch Hijacked Journal Checker,train
+H14,Aegaum Journal (clone),,https://aegaum.com/,hijacked,hijacked,Retraction Watch Hijacked Journal Checker,train
+H15,CATTLE PRACTICE (clone),,https://cattlepractice.org/,hijacked,hijacked,Retraction Watch Hijacked Journal Checker,train
+M01,IEEE Access,2169-3536,https://ieeeaccess.ieee.org/,legitimate,mini,Mini project manual verdict,external
+M02,Expert Systems with Applications,0957-4174,https://www.sciencedirect.com/journal/expert-systems-with-applications,legitimate,mini,Mini project manual verdict,external
+M03,PeerJ Computer Science,2376-5992,https://peerj.com/computer-science/,legitimate,mini,Mini project manual verdict,external
+M04,Sadhana,0256-2499,https://link.springer.com/journal/12046,legitimate,mini,Mini project manual verdict,external
+M05,Journal of Machine Learning Research,1532-4435,https://www.jmlr.org/,legitimate,mini,Mini project manual verdict,external
+M06,Journal of Open Source Software,2475-9066,https://joss.theoj.org/,legitimate,mini,Mini project manual verdict,external
+M07,Computational Intelligence and Neuroscience,1687-5265,https://www.hindawi.com/journals/cin/,compromised,mini,Mini project manual verdict,external
+M08,International Journal of Engineering Research & Technology,2278-0181,https://www.ijert.org/,predatory,mini,Mini project manual verdict,external
+M09,International Research Journal of Engineering and Technology,2395-0056,https://www.irjet.net/,predatory,mini,Mini project manual verdict,external
+M10,Journal of Computer Science & Systems Biology,0974-7230,https://www.omicsonline.org/computer-science-systems-biology.php,predatory,mini,Mini project manual verdict,external
+M11,WASET periodicals,,https://waset.org/,predatory,mini,Mini project manual verdict,external
+M12,Seybold Report (clone),,https://seybold-report.com/,hijacked,mini,Mini project; Retraction Watch Hijacked Journal Checker,external
+M13,Annals of the Romanian Society for Cell Biology (clone),,http://annalsofrscb.ro/index.php/journal,hijacked,mini,Mini project; Retraction Watch Hijacked Journal Checker,external
+L32,International Journal of Advanced Technology and Engineering Exploration,2394-5443,http://accentsjournals.org/journals1.php?journalsId=110,legitimate,scopus_india,"SCImago list (Scopus), country India",train
+L33,International Journal of Advances in Signal and Image Sciences,2457-0370,https://xlescience.org/index.php/IJASIS/,legitimate,scopus_india,"SCImago list (Scopus), country India",train
+L34,Journal of VLSI Circuits and Systems,2582-1458,http://sireejournals.org,legitimate,scopus_india,"SCImago list (Scopus), country India",train
+L35,Indian geotechnical journal,0046-8983,https://www.springer.com/journal/40098,legitimate,scopus_india,"SCImago list (Scopus), country India",train
+L36,Journal of The Institution of Engineers (India) Series D,2250-2122,https://link.springer.com/journal/40033,legitimate,scopus_india,"SCImago list (Scopus), country India",train
+L37,IP Indian Journal of Library Science and Information Technology,2456-9623,https://www.ipinnovative.com/journals/IJLSIT,legitimate,scopus_india,"SCImago list (Scopus), country India",train
+L38,Journal of The Institution of Engineers (India) Series C,2250-0545,https://www.springer.com/journal/40032,legitimate,scopus_india,"SCImago list (Scopus), country India",train
+L39,Indian Journal of Fibre & Textile Research,0971-0426,http://op.niscair.res.in/index.php/IJFTR,legitimate,scopus_india,"SCImago list (Scopus), country India",train
+L40,Defence Science Journal,0011-748X,https://www.indianjournals.com,legitimate,scopus_india,"SCImago list (Scopus), country India",train
+L41,International Journal of Advanced Science and Engineering,2349-5359,http://www.mahendrapublications.com,legitimate,scopus_india,"SCImago list (Scopus), country India",train

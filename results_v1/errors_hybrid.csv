@@ -1,0 +1,17 @@
+jid,title,label,group,rule_trust,hybrid_trust,hybrid_verdict,coverage,failed,unknown
+L02,Nuclear Engineering and Design,legitimate,core,68.75,84.0,High risk,0.575,I3 I4,9
+L04,Procedia Computer Science,legitimate,core,66.25,83.1,High risk,0.525,I3 I4,10
+L05,Journal of Communications and Networks,legitimate,core,68.75,84.2,High risk,0.475,I19,11
+L06,International Journal of Computing,legitimate,core,72.5,77.8,Caution,1.0,I4 I6 I11 I12 I13 I16,0
+L08,Robotics and Biomimetics,legitimate,core,73.75,57.2,Caution,0.975,I3 I5 I9 I10 I11 I16 I18,1
+L10,Journal of Computer Science & Systems Biology,legitimate,core,80.0,77.2,High risk,1.0,I2 I5 I11 I16 I18,0
+L11,International Journal of Artificial Intelligence and Machine Learning,legitimate,core,97.5,78.0,Caution,1.0,I16,0
+L13,Optics and Lasers in Engineering,legitimate,core,68.75,83.5,High risk,0.575,I3 I4,9
+L24,Quarterly of Communications Psychology   فصلنامه روانشناسی ارتباطات,legitimate,doaj,78.75,54.5,Caution,0.925,I2 I9 I10 I17 I18,2
+L31,International Transactions on Electrical Engineering and Computer Science,legitimate,doaj_india,90.0,74.9,High risk,0.95,I13 I14,1
+L32,International Journal of Advanced Technology and Engineering Exploration,legitimate,scopus_india,96.25,77.3,Caution,0.975,I16,1
+L33,International Journal of Advances in Signal and Image Sciences,legitimate,scopus_india,91.25,71.8,Caution,0.975,I14 I16,1
+L34,Journal of VLSI Circuits and Systems,legitimate,scopus_india,85.0,59.5,Caution,1.0,I2 I11 I13 I16,0
+L37,IP Indian Journal of Library Science and Information Technology,legitimate,scopus_india,85.0,47.2,High risk,1.0,I3 I4 I12,0
+L41,International Journal of Advanced Science and Engineering,legitimate,scopus_india,91.25,63.7,Caution,0.975,I14 I16,1
+P26,International Journal of Computer Science Engineering (IJCSE),predatory,beall,85.0,85.7,Low risk,1.0,I5 I13 I16 I20,0

@@ -1,0 +1,14 @@
+jid,title,label,rule_trust,coverage,ml_trust,hybrid_trust,hybrid_verdict,manual_verdict
+M01,IEEE Access,legitimate,93.75,0.975,100.0,96.9,Low risk,Low risk
+M02,Expert Systems with Applications,legitimate,78.75,0.575,100.0,89.4,Low risk,Low risk
+M03,PeerJ Computer Science,legitimate,86.25,0.975,99.7,93.0,Low risk,Low risk
+M04,Sadhana,legitimate,98.75,0.975,99.7,99.2,Low risk,Low risk
+M05,Journal of Machine Learning Research,legitimate,86.25,0.975,96.0,91.1,Low risk,Low risk
+M06,Journal of Open Source Software,legitimate,100.0,1.0,99.0,99.5,Low risk,Low risk
+M07,Computational Intelligence and Neuroscience,compromised,58.75,0.575,99.5,79.1,Caution,Caution
+M08,International Journal of Engineering Research & Technology,predatory,70.0,1.0,100.0,85.0,Low risk,High risk
+M09,International Research Journal of Engineering and Technology,predatory,40.0,0.75,0.0,20.0,High risk,High risk
+M10,Journal of Computer Science & Systems Biology,predatory,58.75,0.525,67.8,63.3,High risk,High risk
+M11,WASET periodicals,predatory,52.5,0.15,2.4,27.5,High risk,High risk
+M12,Seybold Report (clone),hijacked,63.75,0.775,0.5,32.1,High risk,High risk
+M13,Annals of the Romanian Society for Cell Biology (clone),hijacked,63.75,0.775,1.2,32.5,High risk,High risk

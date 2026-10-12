@@ -1,0 +1,44 @@
+feature,coefficient
+log h index,-0.83
+I3 Website domain matches registry,-0.641
+domain age,-0.639
+red flag phrases,0.529
+domain age (missing),-0.475
+top field share,-0.474
+two yr mean citedness,-0.378
+I7 No misleading quality badges,-0.336
+I16 Licence declared,-0.336
+I17 Crossref DOIs registered,-0.327
+I6 No unofficial impact factor,-0.318
+papers last year (missing),0.304
+I1 ISSN valid and registered,-0.304
+log works count (missing),0.304
+top field share (missing),0.304
+cites per paper (missing),0.304
+log h index (missing),0.304
+two yr mean citedness (missing),0.304
+journal age (missing),0.302
+I15 Plausible publication volume,-0.297
+I12 No add-on incentives,0.263
+I9 Peer-review policy linked,0.246
+I2 Website title matches registry,0.243
+I10 Editorial board linked,-0.212
+apc usd (missing),0.212
+log works count,-0.203
+journal age,0.165
+I8 No guaranteed speed or acceptance,-0.164
+I14 Focused scope,-0.161
+red flag phrases (missing),-0.155
+https (missing),-0.155
+site reachable,0.155
+tls error,-0.116
+cites per paper,-0.103
+I13 Professional contact email,-0.102
+I11 Fees disclosed,-0.095
+papers last year,-0.074
+apc usd,0.073
+I18 Ethics or retraction policy linked,0.07
+https,-0.07
+max growth,-0.035
+I4 Domain age fits journal history,0.02
+max growth (missing),0.009

@@ -1,0 +1,39 @@
+{
+  "dataset": {
+    "external/compromised": 1,
+    "external/hijacked": 2,
+    "external/legitimate": 6,
+    "external/predatory": 4,
+    "train/hijacked": 16,
+    "train/legitimate": 40,
+    "train/predatory": 39
+  },
+  "cv": "10 x 5-fold stratified",
+  "hybrid_confusion_first_repeat": {
+    "tn": 37,
+    "fp": 3,
+    "fn": 4,
+    "tp": 51
+  },
+  "external_test": {
+    "n": 13,
+    "agreement": 0.923,
+    "kappa": 0.865
+  },
+  "hijack_test": {
+    "n": 18,
+    "possible_clone_flag": 3,
+    "possible_clone_flag_on_legitimate": 1,
+    "model_only_high_risk (train, out-of-fold)": 14,
+    "model_only_flagged (train, out-of-fold)": 16,
+    "n_train": 16,
+    "flagged_high_risk_by_rules": 15,
+    "k1_any": 15,
+    "k1_without_list (I3 and I4 fail)": 3,
+    "I3_fail": 5,
+    "I4_fail": 5,
+    "I19_fail": 15
+  },
+  "median_seconds_per_journal": 0.1,
+  "mean_coverage": 0.801
+}

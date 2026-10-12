@@ -1,0 +1,11 @@
+jid,title,label,group,rule_trust,hybrid_trust,hybrid_verdict,coverage,failed,unknown
+L06,International Journal of Computing,legitimate,core,72.5,77.0,Caution,1.0,I4 I6 I11 I12 I13 I16,0
+L08,Robotics and Biomimetics,legitimate,core,73.75,50.7,Caution,0.975,I3 I5 I9 I10 I11 I16 I18,1
+L24,Quarterly of Communications Psychology   فصلنامه روانشناسی ارتباطات,legitimate,doaj,78.75,46.0,High risk,0.925,I2 I9 I10 I17 I18,2
+L31,International Transactions on Electrical Engineering and Computer Science,legitimate,doaj_india,92.5,63.1,High risk,1.0,I13 I14,0
+L32,International Journal of Advanced Technology and Engineering Exploration,legitimate,scopus_india,96.25,79.6,Caution,0.975,I16,1
+L34,Journal of VLSI Circuits and Systems,legitimate,scopus_india,85.0,64.7,Caution,1.0,I2 I11 I13 I16,0
+L37,IP Indian Journal of Library Science and Information Technology,legitimate,scopus_india,85.0,46.1,High risk,1.0,I3 I4 I12,0
+L41,International Journal of Advanced Science and Engineering,legitimate,scopus_india,91.25,72.0,Caution,0.975,I14 I16,1
+P24,"Research Journal of Life Sciences, Bioinformatics, Pharmaceutical, and Chemical Sciences (RJLBPCS)",predatory,beall,83.75,84.9,Low risk,0.975,I5 I14 I20,1
+P26,International Journal of Computer Science Engineering (IJCSE),predatory,beall,85.0,86.6,Low risk,1.0,I5 I13 I16 I20,0
