@@ -26,7 +26,7 @@
       <a href="#how">How it works</a>
       <a href="#results">Results</a>
       <a href="#run">Run it</a>
-      <a class="gh" href="https://github.com/HimanshuMaurya12/journalcheck" rel="noopener">GitHub</a>
+      <a class="gh" href="https://github.com/journalcheck/journalcheck" rel="noopener">GitHub</a>
     </nav>
   </div>
 </header>
@@ -108,7 +108,7 @@
     </div>
     <div class="tfoot">
       <span id="count"></span>
-      <span class="dl">Download: <a href="data/journalcheck_dataset.csv" download>dataset with scores (CSV)</a> · <a href="data/journals.json" download>full evidence (JSON)</a> · <a href="https://github.com/HimanshuMaurya12/journalcheck/blob/main/data/features.csv">features.csv</a></span>
+      <span class="dl">Download: <a href="data/journalcheck_dataset.csv" download>dataset with scores (CSV)</a> · <a href="data/journals.json" download>full evidence (JSON)</a> · <a href="https://github.com/journalcheck/journalcheck/blob/main/data/features.csv">features.csv</a></span>
     </div>
     <p class="note">Model scores of the 95 training journals are out-of-fold: each was scored by a model that had not seen it. The 13 external journals were scored by the final model. Labels come from public sources and are not a finding that any journal is predatory.</p>
   </div>
@@ -156,7 +156,7 @@
     <div>
       <h2>Run the full tool</h2>
       <p>The full check reads the journal's website, the public lists and the trained model, and opens in your browser as a small web app. It needs Python 3.10 or newer.</p>
-<pre class="code"><code>git clone https://github.com/HimanshuMaurya12/journalcheck
+<pre class="code"><code>git clone https://github.com/journalcheck/journalcheck
 cd journalcheck
 python3 -m venv .venv &amp;&amp; source .venv/bin/activate
 pip install -r requirements.txt
@@ -173,9 +173,9 @@ python scripts/evaluate.py        # metrics, models, figures
 python scripts/build_site.py      # this website's data</code></pre>
       <p class="small">The evaluation needs only <code>data/features.csv</code>, which is in the repository, so <code>evaluate.py</code> reproduces every number above without going online.</p>
       <ul class="links">
-        <li><a href="https://github.com/HimanshuMaurya12/journalcheck">Source code and README</a></li>
-        <li><a href="https://github.com/HimanshuMaurya12/journalcheck/blob/main/journalcheck/config.py">Every weight and threshold (config.py)</a></li>
-        <li><a href="https://github.com/HimanshuMaurya12/journalcheck/tree/main/results">Results folder</a></li>
+        <li><a href="https://github.com/journalcheck/journalcheck">Source code and README</a></li>
+        <li><a href="https://github.com/journalcheck/journalcheck/blob/main/journalcheck/config.py">Every weight and threshold (config.py)</a></li>
+        <li><a href="https://github.com/journalcheck/journalcheck/tree/main/results">Results folder</a></li>
       </ul>
     </div>
   </div>
@@ -196,7 +196,7 @@ python scripts/build_site.py      # this website's data</code></pre>
 </section>
 </main>
 
-<footer class="foot"><div class="wrap">JournalCheck · Woxsen University · 2026 · <a href="https://github.com/HimanshuMaurya12/journalcheck">github.com/HimanshuMaurya12/journalcheck</a></div></footer>
+<footer class="foot"><div class="wrap">JournalCheck · Woxsen University · 2026 · <a href="https://github.com/journalcheck/journalcheck">github.com/journalcheck/journalcheck</a></div></footer>
 
 <dialog id="report" aria-labelledby="r-title">
   <div class="r-in">

@@ -12,8 +12,8 @@ authors:
 version: 2.0.0
 date-released: 2026-10-12
 license: MIT
-repository-code: "https://github.com/HimanshuMaurya12/journalcheck"
-url: "https://himanshumaurya12.github.io/journalcheck/"
+repository-code: "https://github.com/journalcheck/journalcheck"
+url: "https://journalcheck.github.io/"
 keywords:
   - predatory journals
   - hijacked journals

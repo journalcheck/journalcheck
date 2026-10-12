@@ -3,7 +3,7 @@
 **An explainable framework and prototype for detecting predatory and hijacked journals.**
 B.Tech major project, School of Technology, Woxsen University, 2026.
 
-🌐 **Website:** <https://himanshumaurya12.github.io/journalcheck/>. Browse the dataset, open any journal's evidence report, or check a journal against the registries from your browser.
+🌐 **Website:** <https://journalcheck.github.io/>. Browse the dataset, open any journal's evidence report, or check a journal against the registries from your browser.
 
 JournalCheck turns the 20-criterion manual checklist from our mini project into **21 automated indicators worth 40 points**. The evidence comes from OpenAlex, Crossref, DOAJ, RDAP domain records, the journal's own website and snapshot lists: the Retraction Watch Hijacked Journal Checker, the Beall's list archive, SCImago (Scopus) and the Retraction Watch database.
 
@@ -22,7 +22,7 @@ A **rule engine** and a **logistic-regression model** score the same evidence. T
 Requires Python 3.10 or newer.
 
 ```bash
-git clone https://github.com/HimanshuMaurya12/journalcheck
+git clone https://github.com/journalcheck/journalcheck
 cd journalcheck
 python3 -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
@@ -79,7 +79,7 @@ pytest                               # offline unit tests
 | `results/` | Version 2 results: metrics, error analysis, external test, trained models, figures |
 | `results_sensitivity/` | Version 2 without the three lapsed clones |
 | `results_v1/`, `data/archive/` | Version 1 results and inputs, kept for the iteration analysis |
-| `docs/` | The website (GitHub Pages) |
+| `docs/` | Source of the website, published at <https://journalcheck.github.io/> from the [journalcheck.github.io](https://github.com/journalcheck/journalcheck.github.io) repository |
 
 Not in the repository:
 
