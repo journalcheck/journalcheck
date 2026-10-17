@@ -95,9 +95,7 @@ Country and language are deliberately not used as features. Even so, Indian legi
 
 ## Authors
 
-Rhea Ishani Chemudupati (23WU0101028) and Himanshu Maurya (23WU0102068). Guide: Dr. M. Upendra Kumar, School of Technology, Woxsen University.
-
-Course: Research Writing, Intellectual Property and Scholarly Publishing (25TU08MI16).
+Rhea Ishani Chemudupati and Himanshu Maurya 
 
 ## Licence
 
