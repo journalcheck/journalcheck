@@ -3,7 +3,8 @@
 **An explainable framework and prototype for detecting predatory and hijacked journals.**
 B.Tech major project, School of Technology, Woxsen University, 2026.
 
-🌐 **Website:** <https://journalcheck.github.io/>. Browse the dataset, open any journal's evidence report, or check a journal against the registries from your browser.
+🌐 **Website:** <https://journalcheck.github.io/>. 
+Browse the dataset, open any journal's evidence report, or check a journal against the registries from your browser.
 
 JournalCheck turns the 20-criterion manual checklist from our mini project into **21 automated indicators worth 40 points**. The evidence comes from OpenAlex, Crossref, DOAJ, RDAP domain records, the journal's own website and snapshot lists: the Retraction Watch Hijacked Journal Checker, the Beall's list archive, SCImago (Scopus) and the Retraction Watch database.
 
@@ -95,7 +96,7 @@ Country and language are deliberately not used as features. Even so, Indian legi
 
 ## Authors
 
-Rhea Ishani Chemudupati and Himanshu Maurya 
+Himanshu Maurya and Rhea Ishani Chemudupati
 
 ## Licence
 
