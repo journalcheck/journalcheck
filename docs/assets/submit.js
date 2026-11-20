@@ -1,0 +1,511 @@
+/* JournalCheck — Where to submit (beta).
+   Everything runs in the reader's browser: the PDF is read locally and only the title,
+   abstract and keywords are sent to OpenAlex. Journals and conferences are ranked by how much
+   similar recent work they published, then screened with JournalCheck's registry rules. */
+(() => {
+  "use strict";
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const OA = "https://api.openalex.org";
+  const YEARS_BACK = 5;
+  const PDFJS = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/";
+
+  /* ------------------------------------------------------------ static data */
+  let CONFS = [], JC = {};
+
+  /* ------------------------------------------------------------ where a conference is held */
+  const US_STATES = /^(ca|california|utah|colorado|texas|hawaii|washington|new york|florida|arizona)$/;
+  const ALIAS = { usa: "United States", "united states": "United States", "united state": "United States", us: "United States",
+    uk: "United Kingdom", "united kingdom": "United Kingdom", england: "United Kingdom", scotland: "United Kingdom", wales: "United Kingdom",
+    "republic of korea": "South Korea", "south korea": "South Korea", korea: "South Korea", "the netherlands": "Netherlands",
+    "türkiye": "Turkey", turkey: "Turkey", czechia: "Czech Republic", "mexico city": "Mexico", uae: "United Arab Emirates", "hong kong": "China", macau: "China", "macau sar": "China" };
+  const REGIONS = {
+    India: ["India"],
+    Asia: ["India", "China", "Japan", "Singapore", "South Korea", "Taiwan", "Vietnam", "Malaysia", "Thailand", "Indonesia", "Cambodia", "Philippines", "Sri Lanka", "Bangladesh", "Nepal", "Pakistan"],
+    "Middle East": ["Turkey", "United Arab Emirates", "Saudi Arabia", "Qatar", "Israel", "Egypt", "Jordan", "Oman", "Bahrain", "Kuwait", "Cyprus", "Iran"],
+    Europe: ["Italy", "United Kingdom", "Germany", "Greece", "Spain", "Netherlands", "France", "Portugal", "Poland", "Belgium", "Ireland", "Sweden", "Denmark", "Czech Republic", "Austria", "Cyprus", "Switzerland", "Hungary", "Luxembourg", "Lithuania", "Romania", "Estonia", "Finland", "Slovakia", "Iceland", "Norway"],
+    "North America": ["United States", "Canada", "Mexico"],
+    "Latin America": ["Brazil", "Mexico", "Argentina", "Chile", "Panama", "Barbados", "Colombia", "Peru"],
+    Africa: ["Morocco", "South Africa", "Egypt", "Kenya", "Nigeria", "Tunisia"],
+    Oceania: ["Australia", "New Zealand"],
+  };
+  /* "Kyoto, Japan" → Japan; "Budapest, Hungary (Hybrid)" → Hungary + online; "Virtual" → online only */
+  function locate(place) {
+    const raw = String(place || "");
+    const online = /online|virtual|hybrid/i.test(raw);
+    let last = raw.split(/[,，]/).pop().replace(/\(.*?\)/g, "").replace(/\s*(\/|&|and)\s*(online|virtual).*$/i, "").trim();
+    if (/^(tbd|online|virtual|virtual event|)$/i.test(last)) return { country: null, online };
+    const key = last.toLowerCase();
+    const country = US_STATES.test(key) ? "United States" : ALIAS[key] || last.replace(/\b\w+/g, (w) => w[0].toUpperCase() + w.slice(1).toLowerCase());
+    return { country, online };
+  }
+  /* where = list of tokens: "r:Asia", "c:India", "online"; a conference passes if it matches any of them */
+  function inPlace(conf, where) {
+    if (!where || !where.length) return true;
+    return where.some((w) => w === "online" ? conf.loc.online
+      : w.startsWith("r:") ? (REGIONS[w.slice(2)] || []).includes(conf.loc.country)
+      : conf.loc.country === w.slice(2));
+  }
+  const WHERE = new Set();
+  function fillPlaces() {
+    const box = $("#ws-where"); if (!box) return;
+    const n = {}; CONFS.forEach((c) => { if (c.loc.country) n[c.loc.country] = (n[c.loc.country] || 0) + 1; });
+    const regions = Object.keys(REGIONS).map((r) => [r, CONFS.filter((c) => REGIONS[r].includes(c.loc.country)).length]).filter(([, k]) => k);
+    regions.push(["Online or hybrid", CONFS.filter((c) => c.loc.online).length]);
+    const tok = (r) => (r === "Online or hybrid" ? "online" : `r:${r}`);
+    box.querySelector(".ws-ms-regions").innerHTML = regions.map(([r, k]) =>
+      `<button type="button" class="ws-ms-chip" data-tok="${esc(tok(r))}" aria-pressed="false">${esc(r)} <span>${k}</span></button>`).join("");
+    box.querySelector(".ws-ms-list").innerHTML = Object.keys(n).sort().map((c) =>
+      `<label class="ws-ms-opt" data-name="${esc(c.toLowerCase())}"><input type="checkbox" value="c:${esc(c)}"><span>${esc(c)}</span><em>${n[c]}</em></label>`).join("");
+    const btn = box.querySelector(".ws-ms-btn"), pop = box.querySelector(".ws-ms-pop"), val = box.querySelector(".ws-ms-val");
+    const label = (t) => (t === "online" ? "Online or hybrid" : t.slice(2));
+    const sync = () => {
+      box.querySelectorAll(".ws-ms-chip").forEach((b) => b.setAttribute("aria-pressed", WHERE.has(b.dataset.tok)));
+      box.querySelectorAll(".ws-ms-opt input").forEach((i) => (i.checked = WHERE.has(i.value)));
+      const all = [...WHERE].map(label);
+      val.textContent = !all.length ? "Anywhere" : all.length <= 2 ? all.join(", ") : `${all.slice(0, 2).join(", ")} +${all.length - 2}`;
+      btn.classList.toggle("on", all.length > 0);
+      box.querySelector(".ws-ms-count").textContent = all.length ? `${CONFS.filter((c) => inPlace(c, [...WHERE])).length} conferences in your selection` : `${CONFS.length} conferences tracked`;
+    };
+    const open = (yes) => { pop.hidden = !yes; btn.setAttribute("aria-expanded", yes); if (yes) box.querySelector(".ws-ms-q").focus(); };
+    btn.addEventListener("click", () => open(pop.hidden));
+    box.addEventListener("click", (e) => {
+      const chip = e.target.closest(".ws-ms-chip");
+      if (chip) { WHERE.has(chip.dataset.tok) ? WHERE.delete(chip.dataset.tok) : WHERE.add(chip.dataset.tok); sync(); }
+      if (e.target.closest("[data-clear]")) { WHERE.clear(); sync(); }
+      if (e.target.closest("[data-done]")) { open(false); btn.focus(); }
+    });
+    box.addEventListener("change", (e) => { const i = e.target.closest(".ws-ms-opt input"); if (i) { i.checked ? WHERE.add(i.value) : WHERE.delete(i.value); sync(); } });
+    box.querySelector(".ws-ms-q").addEventListener("input", (e) => {
+      const q = e.target.value.trim().toLowerCase();
+      box.querySelectorAll(".ws-ms-opt").forEach((o) => (o.hidden = q && !o.dataset.name.includes(q)));
+    });
+    document.addEventListener("click", (e) => { if (!pop.hidden && !box.contains(e.target)) open(false); });
+    box.addEventListener("keydown", (e) => { if (e.key === "Escape" && !pop.hidden) { open(false); btn.focus(); } });
+    sync();
+  }
+  const ready = Promise.all([
+    Promise.all([
+      fetch("data/conferences.json").then((r) => r.json()).catch(() => ({ conferences: [] })),
+      fetch("data/conferences_extra.json").then((r) => r.json()).catch(() => ({ conferences: [] })),   // hand-checked regional supplement
+    ]).then(([main, extra]) => {
+      const seen = new Set(main.conferences.map((c) => String(c.title).toLowerCase()));
+      CONFS = [...main.conferences, ...extra.conferences.filter((c) => !seen.has(String(c.title).toLowerCase()))].map(prepConf);
+      CONFS.forEach((c) => (c.loc = locate(c.place))); fillPlaces();
+    }),
+    fetch("data/journals.json").then((r) => r.json()).then((d) => {
+      d.journals.forEach((j) => [j.issn, j.issn_resolved].filter(Boolean).forEach((i) => (JC[i] = j)));
+    }).catch(() => {}),
+  ]);
+
+  /* ------------------------------------------------------------ text → search terms */
+  const STOP = new Set(("a about above after again against all also am an and any are as at be because been before being below between both but by can could did do does doing down during each few for from further had has have having here how i if in into is it its itself just more most no nor not of off on once only or other our ours out over own paper propose proposed present same she should so some such than that the their them then there these they this those through to too under until up very via was we were what when where which while who whom why will with would you your using use used based approach method methods study results show shows new novel towards toward however thus therefore within across among two three one first second significant significantly existing different various respectively achieve achieves achieved performance state art effective efficient work also furthermore moreover").split(" "));
+
+  function terms({ title, abstract, keywords }) {
+    const given = String(keywords || "").split(/[;,·|\n]/).map((k) => k.trim().toLowerCase()).filter((k) => k.length > 2 && k.split(" ").length <= 5);
+    const text = `${title}. ${title}. ${abstract}`.toLowerCase().replace(/[^a-z0-9\-\s.,;:()]/g, " ");
+    const phrases = [];
+    text.split(/[.,;:()\n]+/).forEach((chunk) => {
+      let cur = [];
+      chunk.split(/\s+/).forEach((w) => {
+        w = w.replace(/^-+|-+$/g, "");
+        if (!w || STOP.has(w) || /^\d+$/.test(w) || w.length < 3) { if (cur.length) phrases.push(cur); cur = []; }
+        else cur.push(w);
+      });
+      if (cur.length) phrases.push(cur);
+    });
+    const freq = {}, deg = {};
+    phrases.forEach((p) => p.forEach((w) => { freq[w] = (freq[w] || 0) + 1; deg[w] = (deg[w] || 0) + p.length; }));
+    const scored = {};
+    phrases.filter((p) => p.length <= 3).forEach((p) => { const k = p.join(" "); scored[k] = p.reduce((s, w) => s + deg[w] / freq[w], 0); });
+    const auto = Object.entries(scored).sort((a, b) => b[1] - a[1]).map(([k]) => k)
+      .filter((k, i, all) => !all.slice(0, i).some((o) => o.includes(k) || k.includes(o)));
+    const out = [];
+    [...given, ...auto].forEach((k) => { if (out.length < 7 && !out.some((o) => o === k || o.includes(k))) out.push(k); });
+    return out;
+  }
+
+  /* ------------------------------------------------------------ PDF reading */
+  function loadPdfJs() {
+    if (window.pdfjsLib) return Promise.resolve();
+    return new Promise((res, rej) => {
+      const s = document.createElement("script"); s.src = PDFJS + "pdf.min.js";
+      s.onload = () => { window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + "pdf.worker.min.js"; res(); };
+      s.onerror = () => rej(new Error("The PDF reader could not be loaded."));
+      document.head.appendChild(s);
+    });
+  }
+  async function readPdf(file) {
+    await loadPdfJs();
+    const pdf = await window.pdfjsLib.getDocument({ data: await file.arrayBuffer() }).promise;
+    let lines = [], first = [];
+    for (let p = 1; p <= Math.min(2, pdf.numPages); p++) {
+      const tc = await (await pdf.getPage(p)).getTextContent();
+      let cur = null;
+      tc.items.forEach((it) => {
+        const y = Math.round(it.transform[5]), h = Math.abs(it.transform[3]);
+        if (!cur || Math.abs(cur.y - y) > 2) { cur = { y, h, s: "" }; lines.push(cur); if (p === 1) first.push(cur); }
+        cur.s += (cur.s && !cur.s.endsWith(" ") && !it.str.startsWith(" ") ? " " : "") + it.str; cur.h = Math.max(cur.h, h);
+      });
+    }
+    lines = lines.map((l) => ({ ...l, s: l.s.replace(/\s+/g, " ").trim() })).filter((l) => l.s);
+    first = first.map((l) => ({ ...l, s: l.s.replace(/\s+/g, " ").trim() })).filter((l) => l.s && l.s.length > 3);
+    const maxH = Math.max(...first.slice(0, 25).map((l) => l.h));
+    const title = first.slice(0, 25).filter((l) => l.h >= maxH * 0.92).map((l) => l.s).join(" ").slice(0, 300);
+    const full = lines.map((l) => l.s).join("\n");
+    const ab = full.match(/abstract[\s.:—–-]*([\s\S]{80,3000}?)(?:\n\s*(?:keywords|key words|index terms|ccs concepts|(?:1|i)\.?\s+introduction|introduction)\b)/i);
+    const kw = full.match(/(?:keywords|key words|index terms)\s*[:—–-]?\s*([^\n]{3,300}(?:\n[^\n]{3,200})?)/i);
+    return {
+      title,
+      abstract: ab ? ab[1].replace(/\s*\n\s*/g, " ").replace(/(\w)- (\w)/g, "$1$2").trim() : "",
+      keywords: kw ? kw[1].replace(/\s*\n\s*/g, " ").replace(/\s*(?:1|i)\.?\s+introduction.*$/i, "").trim() : "",
+      pages: pdf.numPages,
+    };
+  }
+
+  /* ------------------------------------------------------------ OpenAlex */
+  const key = () => { try { return localStorage.getItem("jc-oa-key") || ""; } catch { return ""; } };
+  async function oa(path, params = {}) {
+    const u = new URL(OA + path);
+    Object.entries(params).forEach(([k, v]) => u.searchParams.set(k, v));
+    if (key()) u.searchParams.set("api_key", key());
+    let r, left = NaN;
+    // a 429 is either the per-second limit (budget left: wait and retry) or the daily allowance (budget gone)
+    for (let attempt = 0; ; attempt++) {
+      r = await fetch(u, { headers: { Accept: "application/json" } });
+      if (r.status !== 429) break;
+      left = parseFloat(r.headers.get("x-ratelimit-remaining-usd"));
+      if ((Number.isFinite(left) && left <= 0.0005) || attempt >= 3) break;
+      const wait = Math.min(8, parseFloat(r.headers.get("retry-after")) || 0) * 1000 || 700 * 2 ** attempt;
+      await new Promise((res) => setTimeout(res, wait + Math.random() * 300));
+    }
+    if (r.status === 429 && left > 0.0005) throw new Error("OpenAlex is busy right now. Wait a minute and search again.");
+    if (r.status === 429) { $(".ws-adv").open = true; throw new Error("OpenAlex's free daily allowance for this network is used up (on a shared network such as a campus it is shared by everyone). Paste a free OpenAlex key under “Options” below and search again, or try tomorrow."); }
+    if (!r.ok) throw Object.assign(new Error(`OpenAlex answered ${r.status}.`), { status: r.status });
+    return r.json();
+  }
+  const sid = (u) => String(u || "").split("/").pop();
+  const quote = (t) => (t.includes(" ") ? `"${t}"` : t);
+
+  let CLOSEST = 50, SEM_PAUSED = false;
+  const SINCE = () => new Date().getFullYear() - YEARS_BACK;
+  const GENERIC = new Set("machine learning,deep learning,artificial intelligence,neural network,neural networks,data analysis,case study,systematic review,literature review,proposed method,experimental results,large language models,big data".split(","));
+
+  /* the 50 papers closest in meaning to the title + abstract (OpenAlex semantic search, one call) */
+  const SEM_MAX = 1450;
+  async function semantic(input) {
+    // the free API rejects semantic queries over 1,500 characters, so keep the title and keywords whole
+    // and cut the abstract at a word boundary to fit
+    const head = [input.title, input.keywords].filter(Boolean).join(". ");
+    let text = [head, input.abstract].filter(Boolean).join(". ").replace(/\s+/g, " ").trim();
+    if (text.length > SEM_MAX) text = text.slice(0, SEM_MAX).replace(/\s+\S*$/, "");
+    const q = { "search.semantic": text, filter: `publication_year:>${SINCE() - 1},is_retracted:false`, per_page: 50,
+      select: "id,title,publication_year,relevance_score,primary_location,primary_topic" };
+    // under heavy load OpenAlex pauses free semantic search (503, "retry in 60s"); rank on keywords alone then
+    let res;
+    try { res = (await oa("/works", q)).results || []; SEM_PAUSED = false; }
+    catch (err) { if (err.status !== 503) throw err; res = []; SEM_PAUSED = true; }
+    CLOSEST = res.length || 50;
+    return res;
+  }
+  /* how many matching papers each venue published (keyword search on the most specific phrases, grouped) */
+  function focus(ts) {
+    const specific = ts.filter((t) => !GENERIC.has(t));
+    return (specific.length ? specific : ts).slice(0, 3);
+  }
+  async function grouped(ts, sourceType) {
+    const data = await oa("/works", {
+      search: focus(ts).map(quote).join(" OR "),
+      // journals: research and review articles only (no retraction notices or errata); conference papers carry mixed types
+      filter: `from_publication_date:${SINCE()}-01-01,primary_location.source.type:${sourceType},is_retracted:false${sourceType === "journal" ? ",type:article|review" : ""}`,
+      group_by: "primary_location.source.id",
+    });
+    const m = {};
+    (data.group_by || []).forEach((g) => { const k = sid(g.key); if (k) m[k] = { id: k, name: g.key_display_name, count: g.count }; });
+    return m;
+  }
+  /* per-venue evidence from the semantic results; plus the paper's subject profile */
+  function fromSemantic(works) {
+    const by = {}, sub = {}, field = {};
+    const minRel = works.length ? Math.min(...works.map((w) => w.relevance_score || 0)) : 0;
+    works.forEach((w) => {
+      const r = Math.max(0.01, (w.relevance_score || 0) - minRel + 0.02);
+      const t = w.primary_topic;
+      if (t && t.subfield) sub[t.subfield.display_name] = (sub[t.subfield.display_name] || 0) + r;
+      if (t && t.field) field[t.field.display_name] = (field[t.field.display_name] || 0) + r;
+      const s = w.primary_location && w.primary_location.source;
+      if (!s || !s.id) return;
+      const k = sid(s.id);
+      const e = (by[k] = by[k] || { id: k, name: s.display_name, type: s.type, sem: 0, n: 0, titles: [] });
+      e.sem += r; e.n += 1;
+      if (e.titles.length < 2 && w.title) e.titles.push(w.title);
+    });
+    const norm = (o) => { const t = Object.values(o).reduce((a, b) => a + b, 0) || 1; Object.keys(o).forEach((k) => (o[k] /= t)); return o; };
+    return { venues: by, profile: { sub: norm(sub), field: norm(field) } };
+  }
+  /* histogram intersection between the paper's subfields and the venue's published topics */
+  function scope(profile, src) {
+    if (!Object.keys(profile.sub).length) return null;   // no closest papers, so no subject profile to compare
+    const tp = src.topics || [];
+    const tot = tp.reduce((a, t) => a + (t.count || 0), 0);
+    if (!tot) return null;
+    const vs = {}, vf = {};
+    tp.forEach((t) => { const w = (t.count || 0) / tot; if (t.subfield) vs[t.subfield.display_name] = (vs[t.subfield.display_name] || 0) + w; if (t.field) vf[t.field.display_name] = (vf[t.field.display_name] || 0) + w; });
+    const t = T();
+    // intersect: overlap of two distributions, so a broad journal scores low for any one paper.
+    // coverage: how much of the paper's subject mass the journal publishes in at a meaningful level.
+    const inter = t.scopeMode === "coverage"
+      ? (a, b) => Object.keys(a).reduce((s, k) => s + a[k] * Math.min(1, (b[k] || 0) / t.scopeTau), 0)
+      : (a, b) => Object.keys(a).reduce((s, k) => s + Math.min(a[k], b[k] || 0), 0);
+    return 0.7 * inter(profile.sub, vs) + 0.3 * inter(profile.field, vf);
+  }
+
+  /* ------------------------------------------------------------ journals */
+  // ranking settings in one place; the evaluation replay (eval/replay.js) overrides them per experiment
+  const TUNE = {
+    topSem: 20, topKw: 30,                          // candidates: journals among the closest papers, and by keyword count
+    wSem: 0.5, wShare: 0.25, wScope: 0.25, wCount: 0, // weights inside fit
+    shareCap: 0.05, scopeCap: 0.5, countCap: 200,     // values at or above these count as a full match
+    scopeMode: "intersect", scopeTau: 0.05,           // "coverage": credit a subfield once it is >= scopeTau of the journal's topics
+    gateFloor: 0.35,                                  // fit is scaled by gateFloor + (1 - gateFloor) * scope
+    wQuality: 0.15, cautionPenalty: 0.1,
+    scopeMin: 0.15, kwShareMin: 0.005, kwScopeMin: 0.3,
+  };
+  const T = () => Object.assign({}, TUNE, window.__wsTune || {});
+  const SRC_FIELDS = "id,display_name,issn_l,issn,host_organization_name,type,homepage_url,works_count,cited_by_count,summary_stats,is_oa,is_in_doaj,apc_usd,counts_by_year,topics,is_core";
+  function screen(src) {
+    const flags = [];
+    const issns = [src.issn_l, ...(src.issn || [])].filter(Boolean);
+    const known = issns.map((i) => JC[i]).find(Boolean);
+    if (known) flags.push({ level: known.verdict === "High risk" ? "high" : known.verdict === "Caution" ? "cau" : "low", text: `JournalCheck dataset: ${known.verdict}`, id: known.id });
+    const rows = (src.counts_by_year || []).map((c) => [c.year, c.works_count || 0]).sort((a, b) => a[0] - b[0]);
+    for (let i = 1; i < rows.length; i++) {
+      const [y0, w0] = rows[i - 1], [y1, w1] = rows[i];
+      if (y1 === y0 + 1 && y1 < new Date().getFullYear() && w1 >= 500 && w1 / Math.max(w0, 1) >= 3) { flags.push({ level: "cau", text: `Output grew ${(w1 / Math.max(w0, 1)).toFixed(1)}× in ${y1}` }); break; }
+    }
+    if ((src.works_count || 0) < 50) flags.push({ level: "cau", text: "Fewer than 50 papers on record" });
+    const h = (src.summary_stats && src.summary_stats.h_index) || 0;
+    if (!known && !src.is_in_doaj && !src.is_core && h < 25) flags.push({ level: "cau", text: "Little track record: not in DOAJ or the CWTS core list. Run the full check" });
+    const level = flags.some((f) => f.level === "high") ? "high" : flags.some((f) => f.level === "cau") ? "cau" : "low";
+    return { level, flags };
+  }
+  function fee(src) {
+    if (src.apc_usd != null) return { usd: src.apc_usd, text: src.apc_usd === 0 ? "No publication fee" : `APC US$${src.apc_usd.toLocaleString()}` };
+    if (src.is_in_doaj || src.is_oa) return { usd: null, text: "Open access, fee not recorded" };
+    return { usd: 0, text: "Subscription (no fee to publish closed)" };
+  }
+  async function rankJournals(sem, counts, opt) {
+    const t = T(), noProfile = !Object.keys(sem.profile.sub).length;
+    const semJ = Object.values(sem.venues).filter((v) => v.type === "journal");
+    const ids = [...new Set([
+      ...semJ.sort((a, b) => b.sem - a.sem).slice(0, t.topSem).map((v) => v.id),
+      ...Object.values(counts).sort((a, b) => b.count - a.count).slice(0, t.topKw).map((v) => v.id),
+    ])];
+    // single-source lookups are free on OpenAlex; fetch five at a time so a burst does not trip its rate limit
+    const srcs = [];
+    for (let i = 0; i < ids.length; i += 5) srcs.push(...await Promise.all(ids.slice(i, i + 5).map((k) => oa(`/sources/${k}`, { select: SRC_FIELDS }).catch(() => null))));
+    const maxSem = Math.max(0.001, ...semJ.map((v) => v.sem));
+    const scored = ids.map((k, i) => ({ k, s: srcs[i] })).filter(({ s }) => s && s.type === "journal").map(({ k, s }) => {
+      const v = sem.venues[k] || { sem: 0, n: 0, titles: [] }, cnt = (counts[k] || {}).count || 0;
+      // share of the journal's own output that matches: a specialist journal beats a mega-journal with a bigger raw count
+      const total = (s.counts_by_year || []).filter((c) => c.year >= SINCE()).reduce((a, c) => a + (c.works_count || 0), 0);
+      const share = total ? Math.min(1, cnt / total) : 0;
+      const semN = Math.sqrt(v.sem / maxSem), shareN = Math.min(1, share / t.shareCap), sc0 = scope(sem.profile, s);
+      const scopeN = sc0 == null ? 0.3 : Math.min(1, sc0 / t.scopeCap);
+      const countN = Math.min(1, Math.log1p(cnt) / Math.log1p(t.countCap));
+      const h = (s.summary_stats && s.summary_stats.h_index) || 0, quality = Math.min(1, Math.log10(h + 1) / Math.log10(300));
+      // scope also scales the whole fit, so a keyword-heavy journal in another field cannot rank on volume
+      const fit = (t.wSem * semN + t.wShare * shareN + t.wScope * scopeN + t.wCount * countN) * (t.gateFloor + (1 - t.gateFloor) * scopeN);
+      const sc = screen(s), f = fee(s);
+      return { kind: "journal", s, v, cnt, share, scope: sc0, fit, score: (1 - t.wQuality) * fit + t.wQuality * quality - (sc.level === "cau" ? t.cautionPenalty : 0), screen: sc, fee: f };
+    });
+    // evaluation only: keep every candidate's numbers and the first filter that removed it
+    if (t.debug) window.__wsDebug = scored.map((j) => ({ id: j.s.id.split("/").pop(), name: j.s.display_name, sem: +j.v.sem.toFixed(3), n: j.v.n, cnt: j.cnt, share: +j.share.toFixed(4),
+      scope: j.scope == null ? null : +j.scope.toFixed(3), fit: +j.fit.toFixed(3), score: +j.score.toFixed(3), screen: j.screen.level,
+      cut: j.screen.level === "high" ? "high risk" : (j.scope != null && j.scope < t.scopeMin) ? "scopeMin" : (j.v.n === 0 && !(j.share >= t.kwShareMin && (noProfile || (j.scope != null && j.scope >= t.kwScopeMin)))) ? "kw-only gate" : "" }));
+    return scored.filter((j) => j.screen.level !== "high")
+      // a venue whose published topics barely overlap the paper's subject areas is out of scope
+      .filter((j) => j.scope == null || j.scope >= t.scopeMin)
+      .filter((j) => j.v.n > 0 ? true : (j.share >= t.kwShareMin && (noProfile || (j.scope != null && j.scope >= t.kwScopeMin))))
+      .filter((j) => !opt.oaOnly || j.s.is_oa)
+      .filter((j) => opt.maxFee == null || j.fee.usd == null || j.fee.usd <= opt.maxFee)
+      .sort((a, b) => b.score - a.score).slice(0, 10);
+  }
+
+  /* ------------------------------------------------------------ conferences */
+  const norm = (s) => String(s || "").toLowerCase().replace(/&/g, " ").replace(/[^a-z0-9 ]/g, " ").replace(/\b(19|20)\d{2}\b/g, " ").replace(/\b(proceedings|international|conference|symposium|workshop|annual|acm|ieee|on|the|of|and|in|for)\b/g, " ").replace(/\s+/g, " ").trim();
+  function prepConf(c) {
+    const ac = String(c.title || "").replace(/[^A-Za-z0-9]/g, "");
+    // only acronym-like titles (NeurIPS, ICCV) are matched as acronyms; "Cloud" or "Performance" are ordinary words
+    return { ...c, _ac: ac.length >= 3 && (ac.match(/[A-Z]/g) || []).length >= 2 ? new RegExp(`(^|[^A-Za-z])${ac}([^A-Za-z]|$)`) : null, _n: norm(c.name), _tok: new Set(norm(c.name).split(" ").filter((w) => w.length > 2)) };
+  }
+  function matchConf(sourceName) {
+    const n = norm(sourceName), tok = new Set(n.split(" ").filter((w) => w.length > 2));
+    let best = null, bestS = 0;
+    CONFS.forEach((c) => {
+      // exact name, else acronym, else most of the conference's name words present. Ties go to the more
+      // specific name (CVPR beats "Computer Vision Conference", NeurIPS beats ICONIP), and a long name match
+      // outweighs a sponsor acronym inside it ("ACM SIGIR Conference on Human Information..." is CHIIR, not SIGIR)
+      let s = 0;
+      const raw = String(sourceName || "").toLowerCase().trim();
+      if (raw === String(c.name || "").toLowerCase().trim()) s = 1;
+      else if (c._n && n === c._n) s = 0.95;
+      if (c._ac && c._ac.test(sourceName)) s = Math.max(s, 0.85);
+      if (c._tok.size >= 2 || (c._tok.size === 1 && c._n.length > 8)) {
+        const inter = [...c._tok].filter((w) => tok.has(w)).length;
+        let t = inter / c._tok.size >= 0.8 ? 0.7 + Math.min(inter, 5) * 0.04 - Math.min(c._tok.size - inter, 5) / 500 : 0;
+        if (t && c._tok.size === 1) t -= 0.15; // a one-word name ("Eurographics") only wins when nothing longer fits
+        s = Math.max(s, t);
+      }
+      if (s > bestS) { bestS = s; best = c; }
+    });
+    return best;
+  }
+  function rankConferences(sem, counts, opt) {
+    const by = {};
+    const add = (name, semV, n, cnt, titles) => {
+      const c = matchConf(name); if (!c) return;
+      const e = (by[c.id] = by[c.id] || { conf: c, sem: 0, n: 0, cnt: 0, titles: [] });
+      e.sem += semV; e.n += n; e.cnt += cnt; (titles || []).forEach((t) => e.titles.length < 2 && e.titles.push(t));
+    };
+    Object.values(sem.venues).filter((v) => v.type === "conference").forEach((v) => add(v.name, v.sem, v.n, 0, v.titles));
+    Object.values(counts).forEach((g) => add(g.name, 0, 0, g.count, []));
+    const list = Object.values(by);
+    const maxSem = Math.max(0.001, ...list.map((e) => e.sem)), maxCount = Math.max(1, ...list.map((e) => e.cnt));
+    const horizon = opt.months ? Date.now() + opt.months * 30.4 * 864e5 : Infinity;
+    const ranked = list.map((e) => {
+      const rankBoost = ({ "A*": 0.12, A: 0.08, B: 0.04 })[e.conf.core] || ({ A: 0.08, B: 0.04 })[e.conf.ccf] || 0;
+      const fit = 0.6 * (e.sem / maxSem) + 0.4 * (Math.log1p(e.cnt) / Math.log1p(maxCount));
+      return { kind: "conference", e, fit, score: fit + rankBoost };
+    }).filter((x) => x.e.n > 0 || x.e.cnt >= (opt.where.length ? 3 : 25))
+      .filter((x) => inPlace(x.e.conf, opt.where))
+      .filter((x) => !opt.months || (x.e.conf.next && Date.parse(x.e.conf.next.deadline) <= horizon))
+      .sort((a, b) => b.score - a.score).slice(0, 10);
+    if (ranked.length || !opt.where.length) return ranked;
+    // nothing in the chosen place matched the paper: list what is tracked there, clearly marked as unmatched
+    return CONFS.filter((c) => inPlace(c, opt.where))
+      .filter((c) => !opt.months || (c.next && Date.parse(c.next.deadline) <= horizon))
+      .sort((a, b) => (a.next ? Date.parse(a.next.deadline) : Infinity) - (b.next ? Date.parse(b.next.deadline) : Infinity))
+      .slice(0, 10).map((c) => ({ kind: "conference", unmatched: true, fit: 0, score: 0, e: { conf: c, n: 0, cnt: 0, titles: [] } }));
+  }
+
+  /* ------------------------------------------------------------ rendering */
+  const pct = (v) => Math.round(100 * v);
+  const until = (iso) => { const d = Math.ceil((Date.parse(iso) - Date.now()) / 864e5); return d <= 0 ? "passed" : d === 1 ? "1 day left" : `${d} days left`; };
+  const urgency = (iso) => { const d = (Date.parse(iso) - Date.now()) / 864e5; return d <= 30 ? "soon" : d <= 90 ? "mid" : "far"; };
+  const fmtDate = (iso) => new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+  const chip = (lv, t) => `<span class="chip v-${lv}">${esc(t)}</span>`;
+
+  function journalCard(j, i) {
+    const s = j.s, issn = s.issn_l || (s.issn || [])[0] || "";
+    const st = s.summary_stats || {};
+    const verdict = j.screen.level === "low" ? chip("low", "Passes registry checks") : chip("cau", "Review first");
+    return `<li class="ws-card" style="--i:${i}">
+      <div class="ws-rank">${String(i + 1).padStart(2, "0")}</div>
+      <div class="ws-main">
+        <div class="ws-top"><span class="label">Journal${s.host_organization_name ? " · " + esc(s.host_organization_name) : ""}</span>${verdict}</div>
+        <h3>${esc(s.display_name)}</h3>
+        <div class="ws-fit"><span class="ws-bar"><i style="--w:${pct(j.fit)}%"></i></span><span>${pct(j.fit)}% fit</span></div>
+        <p class="ws-ev">${[j.v.n ? `${j.v.n} of the ${CLOSEST} closest papers` : "", j.cnt ? `${j.cnt.toLocaleString()} matching papers since ${SINCE()}${j.share >= 0.005 ? ` (${(100 * j.share).toFixed(j.share < 0.1 ? 1 : 0)}% of its output)` : ""}` : "", j.scope != null ? `scope match ${pct(Math.min(1, j.scope / 0.5))}%` : ""].filter(Boolean).join(" · ")}</p>
+        ${j.v.titles.length ? `<p class="ws-why">Closest: <i>${j.v.titles.map(esc).join("</i> · <i>")}</i></p>` : ""}
+        <dl class="ws-facts">
+          <div><dt>Submission</dt><dd>Open all year</dd></div>
+          <div><dt>Fee</dt><dd>${esc(j.fee.text)}</dd></div>
+          <div><dt>Access</dt><dd>${s.is_in_doaj ? "Open access · in DOAJ" : s.is_oa ? "Open access" : "Subscription / hybrid"}</dd></div>
+          <div><dt>h-index</dt><dd>${st.h_index ?? "–"}</dd></div>
+          <div><dt>2-yr citations / paper</dt><dd>${st["2yr_mean_citedness"] != null ? st["2yr_mean_citedness"].toFixed(1) : "–"}</dd></div>
+        </dl>
+        ${j.screen.flags.some((f) => f.level !== "low") ? `<p class="ws-flags">${j.screen.flags.filter((f) => f.level !== "low").map((f) => esc(f.text)).join(" · ")}</p>` : ""}
+        ${j.screen.flags.filter((f) => f.level === "low" && f.id).map((f) => `<p class="ws-known">${esc(f.text)} · <a href="index.html#journal/${esc(f.id)}">evidence report</a></p>`).join("")}
+        <div class="ws-links">${s.homepage_url ? `<a class="ghost sm" href="${esc(s.homepage_url)}" rel="noopener">Registered homepage <span aria-hidden="true">↗</span></a>` : ""}${issn ? `<a class="ghost sm" href="index.html#check" data-issn="${esc(issn)}">Run the full JournalCheck <span aria-hidden="true">→</span></a>` : ""}</div>
+      </div></li>`;
+  }
+  function confCard(x, i) {
+    const c = x.e.conf, nx = c.next;
+    const ranks = [c.core && `CORE ${c.core}`, c.ccf && `CCF ${c.ccf}`].filter(Boolean).join(" · ");
+    const dl = nx ? `${c.estimated ? "Expected around " : ""}${fmtDate(nx.deadline)}${c.estimated ? "" : ` · <b class="ws-left ${urgency(nx.deadline)}">${until(nx.deadline)}</b>`}` : "Not announced";
+    return `<li class="ws-card" style="--i:${i}">
+      <div class="ws-rank">${String(i + 1).padStart(2, "0")}</div>
+      <div class="ws-main">
+        <div class="ws-top"><span class="label">Conference · ${esc(c.area)}</span>${ranks ? `<span class="chip v-low">${esc(ranks)}</span>` : ""}</div>
+        <h3>${esc(c.title)} <span class="ws-sub">${esc(c.name)}</span></h3>
+        ${x.unmatched ? `<p class="ws-flags">Not matched to your paper. Listed because it is held in the place you chose; check its topics first.</p>` : `<div class="ws-fit"><span class="ws-bar"><i style="--w:${pct(x.fit)}%"></i></span><span>${pct(x.fit)}% fit</span></div>`}
+        <p class="ws-ev">${[x.e.n ? `${x.e.n} of the ${CLOSEST} closest papers` : "", x.e.cnt ? `${x.e.cnt.toLocaleString()} matching papers since ${SINCE()}` : ""].filter(Boolean).join(" · ")}</p>
+        ${x.e.titles.length ? `<p class="ws-why">Closest: <i>${x.e.titles.map(esc).join("</i> · <i>")}</i></p>` : ""}
+        <dl class="ws-facts">
+          <div><dt>Submission deadline</dt><dd>${dl}${nx && nx.comment && !c.estimated ? `<span class="ws-note">${esc(nx.comment)}</span>` : ""}</dd></div>
+          ${nx && nx.abstract && !c.estimated ? `<div><dt>Abstract due</dt><dd>${fmtDate(nx.abstract)}${Date.parse(nx.abstract) < Date.now() ? ` <span class="small">· passed</span>` : ""}</dd></div>` : ""}
+          <div><dt>${c.estimated ? `Edition on record (${esc(c.year)})` : "Conference dates"}</dt><dd>${esc(c.date || "Not announced")}</dd></div>
+          <div><dt>${c.estimated ? "Its venue" : "Venue"}</dt><dd>${esc(c.place || "Not announced")}</dd></div>
+          <div><dt>Acceptance</dt><dd>${c.accept ? `${Math.round(100 * c.accept.rate)}% (${c.accept.year})` : "–"}</dd></div>
+          <div><dt>Fee</dt><dd>See registration page</dd></div>
+        </dl>
+        <div class="ws-links">${c.link ? `<a class="ghost sm" href="${esc(c.link)}" rel="noopener">Conference site <span aria-hidden="true">↗</span></a>` : ""}</div>
+      </div></li>`;
+  }
+
+  /* ------------------------------------------------------------ wiring */
+  const form = $("#ws-form"), out = $("#ws-out"), status = $("#ws-status");
+  const say = (html) => { status.innerHTML = html; };
+
+  $("#ws-file").addEventListener("change", async (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    $("#ws-drop").classList.add("busy"); say(`<span class="spin"></span> Reading ${esc(f.name)} in your browser…`);
+    try {
+      const r = await readPdf(f);
+      if (r.title) $("#ws-title").value = r.title;
+      if (r.abstract) $("#ws-abstract").value = r.abstract;
+      if (r.keywords) $("#ws-keywords").value = r.keywords;
+      say(`Read ${esc(f.name)} (${r.pages} page${r.pages === 1 ? "" : "s"}). ${r.abstract ? "Check the title, abstract and keywords below, then find venues." : "No abstract found: paste it below."} The file never left your device.`);
+    } catch (err) { say(`<span class="err">${esc(err.message || "This PDF could not be read.")}</span> Type the details below instead.`); }
+    finally { $("#ws-drop").classList.remove("busy"); }
+  });
+  const drop = $("#ws-drop");
+  ["dragenter", "dragover"].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add("over"); }));
+  ["dragleave", "drop"].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.remove("over"); }));
+  drop.addEventListener("drop", (e) => { const f = e.dataTransfer.files[0]; if (f && /pdf$/i.test(f.type || f.name)) { const dt = new DataTransfer(); dt.items.add(f); $("#ws-file").files = dt.files; $("#ws-file").dispatchEvent(new Event("change")); } });
+
+  try { $("#ws-key").value = key(); } catch {}
+  $("#ws-key").addEventListener("change", (e) => { try { localStorage.setItem("jc-oa-key", e.target.value.trim()); } catch {} });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const input = { title: $("#ws-title").value.trim(), abstract: $("#ws-abstract").value.trim(), keywords: $("#ws-keywords").value.trim() };
+    if ((input.title + input.abstract + input.keywords).length < 20) { say(`<span class="err">Add at least a title or a few keywords.</span>`); return; }
+    const kind = $("input[name=ws-kind]:checked").value;
+    const opt = { oaOnly: $("#ws-oa").checked, maxFee: $("#ws-fee").value === "" ? null : Number($("#ws-fee").value), months: Number($("#ws-months").value) || 0, where: [...WHERE] };
+    const ts = terms(input);
+    const go = $("#ws-go"); go.disabled = true;
+    say(`<span class="spin"></span> Finding the papers closest to yours in OpenAlex…`);
+    out.innerHTML = "";
+    try {
+      await ready;
+      const sem = fromSemantic(await semantic(input));
+      const [cj, cc] = await Promise.all([kind !== "conference" ? grouped(ts, "journal") : {}, kind !== "journal" ? grouped(ts, "conference") : {}]);
+      const js = kind !== "conference" ? await rankJournals(sem, cj, opt) : [];
+      const cs = kind !== "journal" ? rankConferences(sem, cc, opt) : [];
+      const col = (title, items, card, empty, cls) => `<section class="ws-col ${cls}"><div class="ws-col-head"><p class="label">${title}</p><span class="label">${items.length} of 10</span></div>${items.length ? `<ol class="ws-list">${items.map(card).join("")}</ol>` : `<p class="note">${empty}</p>`}</section>`;
+      out.innerHTML = `<div class="ws-terms"><span class="label">Matched by meaning to your title and abstract, and by keywords</span>${focus(ts).map((t, i) => `<span class="ws-term" style="--i:${i}">${esc(t)}</span>`).join("")}</div>
+        <div class="ws-cols ${kind === "both" ? "two" : ""}">
+          ${kind !== "conference" ? col("Journals", js, journalCard, "No journal matched. Try broader keywords or remove a filter.", "is-j") : ""}
+          ${kind !== "journal" ? col("Conferences (computer science)", cs, confCard, "No tracked conference matched. Conference deadlines cover computer science only for now.", "is-c") : ""}
+        </div>`;
+      say(SEM_PAUSED
+        ? `Done, with keywords only: OpenAlex has paused its free meaning-level search because of heavy load, so these are ranked by matching papers since ${SINCE()}. Search again in a minute for the full ranking.`
+        : `Done. Ranked by meaning-level similarity, matching papers since ${SINCE()} and scope; high-risk journals were removed.`);
+      out.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (err) {
+      say(`<span class="err">${esc(err.message || "Something went wrong.")}</span>`);
+    } finally { go.disabled = false; }
+  });
+
+  /* "Run the full JournalCheck" opens the main page's live check with the ISSN filled in */
+  out.addEventListener("click", (e) => {
+    const a = e.target.closest("a[data-issn]"); if (!a) return;
+    try { sessionStorage.setItem("jc-prefill", a.dataset.issn); } catch {}
+  });
+
+  /* test hook (used by the automated checks only) */
+  window.__ws = { terms, focus, scope, matchConf: (n) => (matchConf(n) || {}).title, ready };
+})();
